@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rahasia 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffe0e9 0%, #ffd6cc 50%, #ffe8d6 100%);
+    font-family: 'Lato', sans-serif;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hearts-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .heart-float {
+    position: absolute;
+    opacity: 0.15;
+    animation: floatUp 6s ease-in infinite;
+    color: #e05070;
+    font-size: 20px;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(110vh) rotate(0deg); opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(20deg); opacity: 0; }
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .page { display: none; flex-direction: column; align-items: center; width: 100%; }
+  .page.active { display: flex; animation: fadeSlide 0.6s ease; }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: rgba(255,255,255,0.88);
+    border-radius: 24px;
+    border: 1px solid rgba(220,120,140,0.25);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    width: 100%;
+    backdrop-filter: blur(8px);
+  }
+
+  .photo-frame {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff9ab2, #ffb4a2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+    cursor: pointer;
+    border: 5px solid white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 72px;
+    line-height: 1;
+    box-shadow: 0 6px 24px rgba(220,80,100,0.2);
+  }
+
+  .photo-frame:hover {
+    transform: scale(1.07);
+    box-shadow: 0 12px 36px rgba(220,80,100,0.35);
+  }
+
+  .click-hint {
+    font-size: 11px;
+    color: #c0607a;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    opacity: 0.65;
+    margin-top: 0.5rem;
+  }
+
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: #8b3a52;
+    margin: 0 0 0.4rem;
+    font-weight: 600;
+  }
+
+  .page-sub {
+    font-size: 13px;
+    color: #c0607a;
+    margin: 0 0 1.5rem;
+    opacity: 0.8;
+  }
+
+  .pw-input {
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: 12px;
+    border: 1.5px solid #f0b0c0;
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    color: #5c2a3a;
+    background: #fff7f9;
+    outline: none;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+
+  .pw-input:focus { border-color: #e05070; }
+
+  .btn-masuk {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #e05070, #f07060);
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: transform 0.2s, opacity 0.2s;
+    box-shadow: 0 4px 16px rgba(220,80,100,0.35);
+  }
+
+  .btn-masuk:hover  { transform: scale(1.02); opacity: 0.92; }
+  .btn-masuk:active { transform: scale(0.98); }
+
+  .err-msg {
+    color: #c0304a;
+    font-size: 13px;
+    margin-top: 0.6rem;
+    min-height: 18px;
+  }
+
+  .msg-box {
+    text-align: left;
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: #5c2a3a;
+    max-height: 340px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .msg-box p { margin: 0 0 1rem; }
+  .msg-box p:last-child { margin-bottom: 0; }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #f0b0c0, transparent);
+    margin: 1.25rem 0;
+  }
+
+  .emoji-row {
+    font-size: 22px;
+    letter-spacing: 6px;
+    margin: 0.5rem 0;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #fff0f4; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb { background: #f0b0c0; border-radius: 4px; }
+
+  .lock-icon { font-size: 52px; margin-bottom: 0.75rem; display: block; }
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="hb"></div>
+
+<div class="wrap">
+
+  <!-- Halaman 1 -->
+  <div class="page active" id="p1">
+    <div class="card">
+      <div class="photo-frame" onclick="goPage(2)">🌸</div>
+      <h1 class="page-title">Ada sesuatu buat kamu</h1>
+      <p class="page-sub">Klik foto di atas untuk membuka...</p>
+      <div class="click-hint">✦ tap to reveal ✦</div>
+    </div>
+  </div>
+
+  <!-- Halaman 2 -->
+  <div class="page" id="p2">
+    <div class="card">
+      <span class="lock-icon">🔒</span>
+      <h2 class="page-title">Masukkan Password</h2>
+      <p class="page-sub">Hanya kamu yang tahu ini...</p>
+      <input class="pw-input" type="password" id="pw" placeholder="Password rahasia..."
+             onkeydown="if(event.key==='Enter') cek()">
+      <button class="btn-masuk" onclick="cek()">Buka Pesan ✦</button>
+      <div class="err-msg" id="errMsg"></div>
+    </div>
+  </div>
+
+  <!-- Halaman 3 -->
+  <div class="page" id="p3">
+    <div class="card">
+      <div class="emoji-row">🎀 💌 🎀</div>
+      <h2 class="page-title" style="font-style:italic;">Pesan Khusus Buat Kamu</h2>
+      <div class="divider"></div>
+      <div class="msg-box">
+        <p>Heyyyy princess ku... jangan pernah anggap dirimu tidak berharga. Kamu sangat istimewa — bahkan aku tidak bisa menjelaskan betapa beruntungnya aku memilikimu dalam hidupku.</p>
+        <p>Kamu benar-benar sempurna dengan caramu sendiri. Senyumanmu, matamu yang indah, dan semua yang ada pada dirimu — aku bangga dengan semua tentangmu. Kamu luar biasa! 💘</p>
+        <div class="divider"></div>
+        <p>Aku hanya mau mengingatkan... hubungan kita tidak selalu mulus, dan tidak akan pernah. Kita akan terus diuji, entah itu masalah besar maupun kecil.</p>
+        <p>Tapi itu semua untuk melihat seberapa kuat kita, seberapa sabar hubungan kita, atau seberapa mudah kita menyerah. Keputusan itu ada di kita berdua — kita harus jalanin bareng.</p>
+        <p>Jangan pakai kata <em>"putus"</em> untuk mengakhiri. Kita harus hadapi semuanya bareng-bareng, dan kalau pun harus berakhir, biarlah dengan cara yang baik-baik saja. Kita hadapi semua ini bareng, okay? 🫶</p>
+      </div>
+      <div class="divider"></div>
+      <div class="emoji-row">🥰 😘 💙 🔥 🫶</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Floating hearts
+  const hb = document.getElementById('hb');
+  for (let i = 0; i < 16; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart-float';
+    h.textContent = ['♥','❥','♡'][i % 3];
+    h.style.left = (Math.random() * 92) + '%';
+    h.style.animationDelay = (Math.random() * 5) + 's';
+    h.style.animationDuration = (4 + Math.random() * 5) + 's';
+    h.style.fontSize = (14 + Math.random() * 20) + 'px';
+    hb.appendChild(h);
+  }
+
+  function goPage(n) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('p' + n).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function cek() {
+    const v = document.getElementById('pw').value;
+    const err = document.getElementById('errMsg');
+    if (v === 'melda lucu') {
+      err.textContent = '';
+      goPage(3);
+    } else {
+      err.textContent = 'Password salah, coba lagi ya 😚';
+      document.getElementById('pw').value = '';
+      document.getElementById('pw').focus();
+    }
+  }
+</script>
+
+</body>
+</html>
